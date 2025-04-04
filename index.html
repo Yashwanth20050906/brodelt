@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>brodelt.com</title>
+    <meta name="description" content="Professional fitness advice tailored to your needs" />
+    <meta name="author" content="Brodelt" />
+
+    <meta property="og:title" content="brodelt.com" />
+    <meta property="og:description" content="Professional fitness advice tailored to your needs" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://brodelt.com/opengraph-image.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@brodelt" />
+    <meta name="twitter:image" content="https://brodelt.com/opengraph-image.png" />
+    
+    <style>
+      /* More aggressive hiding of Lovable badge */
+      .lovable-badge, .lovable-badge-container, [id*="lovable"], [class*="lovable"],
+      div[style*="z-index: 999999"], div[style*="z-index:999999"],
+      div[style*="position: fixed"][style*="bottom"],
+      div[style*="position:fixed"][style*="bottom"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        z-index: -9999 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <script>
+      // Enhanced function to remove the Lovable badge
+      function removeLovableBadge() {
+        // Target by known selectors
+        const selectors = [
+          '[id*="lovable"]', 
+          '[class*="lovable"]', 
+          '.lovable-badge', 
+          '.lovable-badge-container',
+          // Target fixed position elements at bottom of page with high z-index (common for floating badges)
+          'div[style*="position: fixed"][style*="bottom"]',
+          'div[style*="position:fixed"][style*="bottom"]',
+          // Target by z-index which is typically very high for these badges
+          'div[style*="z-index: 999"]',
+          'div[style*="z-index:999"]',
+          // Target specific elements that may be lovable-related but don't use the lovable name
+          '[id*="editor-badge"]',
+          '[class*="editor-badge"]',
+          // Target by position and appearance
+          'div[style*="position: fixed"][style*="border-radius: 50%"]',
+          'div[style*="position:fixed"][style*="border-radius: 50%"]'
+        ];
+        
+        // Find all potential badge elements
+        const badgeElements = document.querySelectorAll(selectors.join(', '));
+        
+        // Remove each badge
+        badgeElements.forEach(element => {
+          if (element) {
+            element.style.display = 'none';
+            element.style.visibility = 'hidden';
+            element.style.opacity = '0';
+            element.style.pointerEvents = 'none';
+            element.style.zIndex = '-9999';
+            element.style.width = '0';
+            element.style.height = '0';
+            element.style.overflow = 'hidden';
+            element.remove();
+          }
+        });
+        
+        // Additional approach - look for fixed elements with high z-index or floating buttons
+        document.querySelectorAll('div, button, a').forEach(el => {
+          const style = window.getComputedStyle(el);
+          if (
+            (style.position === 'fixed' && 
+             (parseInt(style.zIndex) > 9000 || style.bottom === '0px' || style.bottom === '0')) ||
+            (style.position === 'fixed' && style.borderRadius === '50%')
+          ) {
+            // Check if it might be the floating badge
+            const rect = el.getBoundingClientRect();
+            if (rect.width < 100 && rect.height < 100) {
+              el.style.display = 'none';
+              el.style.visibility = 'hidden';
+              el.style.opacity = '0';
+              el.remove();
+            }
+          }
+        });
+      }
+      
+      // Run immediately
+      removeLovableBadge();
+      
+      // Run when DOM content is loaded
+      document.addEventListener('DOMContentLoaded', removeLovableBadge);
+      
+      // Run when window is fully loaded
+      window.addEventListener('load', removeLovableBadge);
+      
+      // Also run periodically to catch any dynamically added badges
+      setInterval(removeLovableBadge, 500);
+      
+      // Final attempt - override any potential badge-creating functions
+      window.addEventListener('load', function() {
+        setTimeout(removeLovableBadge, 1000);
+        setTimeout(removeLovableBadge, 2000);
+        setTimeout(removeLovableBadge, 5000);
+      });
+      
+      // Override document title to ensure it always shows brodelt.com
+      document.title = "brodelt.com";
+      
+      // Add additional meta tag to override any dynamically set meta tags
+      const linkTag = document.createElement('link');
+      linkTag.rel = 'canonical';
+      linkTag.href = 'https://brodelt.com';
+      document.head.appendChild(linkTag);
+    </script>
+  </body>
+</html>
