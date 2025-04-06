@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -25,90 +24,71 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!username || !password) {
+    try {
+      const success = await login(username, password);
+      if (success) {
+        navigate('/admin');
+      } else {
+        toast({
+          title: 'Login Failed',
+          description: 'Invalid username or password.',
+        });
+      }
+    } catch (error) {
       toast({
         title: 'Error',
-        description: 'Please enter both username and password',
-        variant: 'destructive',
+        description: 'Something went wrong. Please try again.',
       });
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    const success = login(username, password);
-    
-    if (success) {
-      toast({
-        title: 'Success',
-        description: 'Logged in successfully',
-      });
-      navigate('/admin');
-    } else {
-      toast({
-        title: 'Error',
-        description: 'Invalid credentials',
-        variant: 'destructive',
-      });
-    }
-    
-    setIsLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       <Header />
-      
-      <main className="flex-grow pt-24 pb-16 flex items-center justify-center">
-        <div className="w-full max-w-md px-4">
-          <Card className="border-0 shadow-lg">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl font-bold text-center">Admin Login</CardTitle>
-              <CardDescription className="text-center">
-                Enter your credentials to access the admin dashboard
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="username">Username</Label>
-                  <Input
-                    id="username"
-                    placeholder="Enter your username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-              </form>
+      <div className="flex justify-center items-center min-h-screen px-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Admin Login</CardTitle>
+            <CardDescription>Access admin dashboard</CardDescription>
+          </CardHeader>
+          <form onSubmit={handleSubmit}>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
             </CardContent>
             <CardFooter>
-              <Button 
-                className="w-full" 
-                onClick={handleSubmit}
-                disabled={isLoading}
-              >
-                {isLoading ? "Logging in..." : "Login"}
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : 'Login'}
               </Button>
             </CardFooter>
-          </Card>
-        </div>
-      </main>
-      
+          </form>
+        </Card>
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 
