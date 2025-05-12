@@ -10,7 +10,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 const Index = lazy(() => import("./pages/Index"));
 const Payment = lazy(() => import("./pages/Payment"));
 const Success = lazy(() => import("./pages/Success"));
-const Admin = lazy(() => import("./pages/Admin"));
+const Admin = lazy(() => import("./Admin"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
