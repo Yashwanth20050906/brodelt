@@ -20,7 +20,7 @@ const Index = () => {
           <div className="container mx-auto container-padding">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <span className="inline-block px-3 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-4">
-                Get Started
+                Started
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Request Your Personalized Consultation
